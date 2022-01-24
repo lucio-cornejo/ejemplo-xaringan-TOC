@@ -900,6 +900,20 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
         } else {
           tocDiv.style.display = 'block';
         }
+
+        // Cross toc anchors from previous slides
+        let currentSlide = slideshow.getCurrentSlideIndex();
+        if ( currentSlide > 0 ) {
+          toc.children.forEach( (element) => {
+            if ( parseInt(element.firstChild.dataset.slide) < currentSlide ) {
+              element.firstChild.style.opacity = 0.5;
+              element.firstChild.style.textDecoration = "line-through";
+            } else {
+              element.firstChild.style.opacity = 1;
+              element.firstChild.style.textDecoration = "";
+            }
+          });
+        }
         
         //// Best alternative I've found so far to insert table of contents ////
         // slides[slideshow.getCurrentSlideIndex()].children[0].append(tocDiv);
