@@ -74,11 +74,6 @@
         if (event.repeat) {
           return;
         }
-        if(tocDiv.style.display === 'block') {
-          tocDiv.style.display = 'none';
-        } else {
-          tocDiv.style.display = 'block';
-        }
 
         // Cross and change opacity of toc anchors from previous slides
         let currentSlide = slideshow.getCurrentSlideIndex();
@@ -118,8 +113,13 @@
         tocDiv.style.width = 'auto';
         tocDiv.style.height = '50vh';
 
-        // Insert table of contents on page
-        body.append(tocDiv);
+        if(tocDiv.style.display === 'block') {
+          tocDiv.style.display = 'none';
+        } else {
+          tocDiv.style.display = 'block';
+          // Insert table of contents on page
+          body.append(tocDiv);
+        }
 
         event.preventDefault();
         event.stopPropagation();
@@ -161,11 +161,6 @@
         if (event.repeat) {
           return;
         }
-        if(tocDiv.style.display === 'block') {
-          tocDiv.style.display = 'none';
-        } else {
-          tocDiv.style.display = 'block';
-        }
 
         // Check if there is empty space where to insert the toc
         let someSlide = document.querySelector('div.remark-slide-scaler');
@@ -202,6 +197,14 @@
             element.firstChild.style.textDecoration = "";
           }
         });
+
+        if(tocDiv.style.display === 'block') {
+          tocDiv.style.display = 'none';
+        } else {
+          tocDiv.style.display = 'block';
+          // Insert table of contents on page
+          body.append(tocDiv);
+        }
       }
     });
 
