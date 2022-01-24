@@ -23,6 +23,9 @@ knitr::opts_chunk$set(echo = TRUE)
 # Comandos para la tabla de contenidos (_toc_)
 
 - Presionar **t** para mostrar u ocultar la _toc_ .
+
+<br>
+
 - Presionar **s** para mostrar u ocultar la _toc_, tras 
   haberla insertado en el espacio vacío izquierdo que dejan
   estas diapositivas de Xaringan, en caso exista aquel espacio vacío.
