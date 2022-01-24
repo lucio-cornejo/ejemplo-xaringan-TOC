@@ -80,10 +80,10 @@
           tocDiv.style.display = 'block';
         }
 
-        // Cross toc anchors from previous slides
+        // Cross and change opacity of toc anchors from previous slides
         let currentSlide = slideshow.getCurrentSlideIndex();
-        if ( currentSlide > 0 ) {
-          toc.children.forEach( (element) => {
+        toc.children.forEach( (element) => {
+          if ( currentSlide > 0 ) {
             if ( parseInt(element.firstChild.dataset.slide) < currentSlide ) {
               element.firstChild.style.opacity = 0.5;
               element.firstChild.style.textDecoration = "line-through";
@@ -91,8 +91,12 @@
               element.firstChild.style.opacity = 1;
               element.firstChild.style.textDecoration = "";
             }
+          } else {
+            // Currrent slide is the first one, so undo cross and opacity changes
+            element.firstChild.style.opacity = 1;
+            element.firstChild.style.textDecoration = "";
+          }
           });
-        }
         
         //// Best alternative I've found so far to insert table of contents ////
         // slides[slideshow.getCurrentSlideIndex()].children[0].append(tocDiv);
@@ -111,7 +115,17 @@
     // Make anchors in Table of Contents activate appropriate slide change when clicked
     toc.children.forEach( (item) => {
       item.firstChild.addEventListener('click', function(event) {
+        // Go to appropriate slide
         slideshow.gotoSlide(1+parseInt(this.dataset.slide));
+
+        // Close and open table of contents in order to activate
+        // line-through and opacity change of previous anchors
+        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
+        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
+
+        // Scroll the table of contents to the anchor just clicked
+        this.scrollIntoView();
+
         event.preventDefault();
         event.stopPropagation();
       })

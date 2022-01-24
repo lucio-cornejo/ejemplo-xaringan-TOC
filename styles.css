@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 #toc-container {
   padding: 0;
   float: left;
@@ -9,8 +13,13 @@
   border: 2px solid black;
   background-color: #F0F0F0;
   overflow: auto;
+  
+  min-width: 10vw; 
   max-height: 50vh;
-  min-width: 20vw;
+  resize: horizontal;
+
+  /* height: 100vh; */
+  /* transform: rotateX(180deg); */
 }
 
 #toc-container p {
