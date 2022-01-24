@@ -1,0 +1,115 @@
+<script>
+  let body;
+  let slidesParent, slides, headers;
+  let slidesHeaders = [];
+  let toc, tocDiv, tocTitle;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set variables
+    body = document.querySelector('body');
+    slidesParent = document.querySelector('div.remark-slides-area');
+
+    // Important to search for headers only in the 
+    // div.remark-slides-area, because, if not, there are 
+    // headers that get added more than once to the variable "headers"
+    headers = document.querySelectorAll('div.remark-slides-area h1, div.remark-slides-area h2, div.remark-slides-area h3, div.remark-slides-area h4, div.remark-slides-area h5, div.remark-slides-area h6');
+
+    // Convert some variables to arrays
+    headers = Array.prototype.slice.call(headers);
+    slides = Array.prototype.slice.call(slidesParent.children);
+
+    // Remove headers with class "no-toc"
+    headers = headers.filter(element => !( element.classList.contains('no-toc') ));
+
+    // Remove the header h1 "Help" from the Xaringan menu
+    for (let i =0; i< headers.length; i++){
+      if(headers[i].classList.length === 0 && headers[i].textContent === 'Help'){
+        headers.splice(i,1);
+      }
+    }
+
+    // Group headers via the slide they belong to
+    for(let i=0; i < slides.length; i++){
+      let temporal = headers.filter(header => slides.indexOf(getDivSlideContainer(header)) === i);
+      if (temporal.length > 0){
+        slidesHeaders.push({ 
+          key: i,
+          value: temporal
+        });
+      }  
+    }
+
+    // Create an ordered list via slidesHeaders variable
+    tocDiv = document.createElement('div');
+    tocDiv.id = "toc-container";
+
+    tocTitle = document.createElement('p');
+    tocTitle.textContent = "Table of contents";
+    tocDiv.append(tocTitle);
+    tocDiv.append(document.createElement('hr'));
+
+    toc = document.createElement('ol');
+    toc.id = "xaringan-toc";
+    tocDiv.append(toc);
+    slidesHeaders.forEach( (element) => {
+      element.value.forEach( (header) => {
+        let tocItem = document.createElement('li');
+        let anchor = document.createElement('a')
+        // Insert header name
+        anchor.innerHTML = header.textContent;
+        // Pass info about header's slide container
+        anchor.setAttribute('data-slide',element.key)
+        
+        // Add header item to table of contents
+        toc.append(tocItem);
+        tocItem.append(anchor);
+        
+      })
+    });
+
+
+    // Pres key t to display Table of Contents
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "t") {
+        if (event.repeat) {
+          return;
+        }
+        if(tocDiv.style.display === 'block') {
+          tocDiv.style.display = 'none';
+        } else {
+          tocDiv.style.display = 'block';
+        }
+        
+        //// Best alternative I've found so far to insert table of contents ////
+        // slides[slideshow.getCurrentSlideIndex()].children[0].append(tocDiv);
+        // Such alternative has the issue that sometimes double the key press
+        // is required in order to show de TOC, due to it being "hidden"
+        // after changing slide from a slide where the TOC was displayed.
+        
+        // Insert table of contents on page
+        body.append(tocDiv);
+
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+
+    // Make anchors in Table of Contents activate appropriate slide change when clicked
+    toc.children.forEach( (item) => {
+      item.firstChild.addEventListener('click', function(event) {
+        slideshow.gotoSlide(1+parseInt(this.dataset.slide));
+        event.preventDefault();
+        event.stopPropagation();
+      })
+    });
+
+  });
+
+  function getDivSlideContainer(header) {
+    let temporal = header;
+    while (! temporal.parentNode.classList.contains('remark-slide-container')) {
+      temporal = temporal.parentNode;
+    }
+    return temporal.parentNode;
+  }
+</script>

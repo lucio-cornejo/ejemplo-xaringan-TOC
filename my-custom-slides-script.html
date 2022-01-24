@@ -1,0 +1,89 @@
+<script>
+    // Code to change color of slide number when the current slide has presentator notes
+    function change_slide_number_color() {
+        
+        // Check notes section of current slide
+        let notas = document.querySelector('div.remark-notes'); 
+        
+        // Get all the slide number div tags
+        let numero_diapositiva = document.querySelectorAll('div.remark-slide-number'); 
+        
+        // Check if the are notes in current slide
+        if( !(notas.children.length === 0) ) {
+            // Color current slide number when there are notes in current slide
+            numero_diapositiva[slideshow.getCurrentSlideIndex()].style.color = "red";
+        }
+    }
+    
+    // Repeating this function every 0.2 seconds does not affect the web's performance 
+    // (lag and loading time, for example) in any significant way, at least in my weak laptop.
+    setInterval(change_slide_number_color, 200)
+
+    // Code to fix the change of slide when scrolling and when clicking some elements
+    let touchmoved;
+    $('div.remark-slide-container').on('touchend', function(event){
+        if(touchmoved === true) {
+            // Do not change slide if scrolling took place
+            event.preventDefault(); 
+            event.stopPropagation();
+        } else {
+            // Fix for issue when clicking an image with an anchor
+            if(event.target.tagName === "IMG") {
+                if (event.target.parentNode.getAttribute("href").includes("https:")) {
+                    // If there was no scrolling and the user clicked on an image
+                    // which has an anchor, then do not change slide and open
+                    // in a next window the site linked to image touched
+                    event.preventDefault(); 
+                    event.stopPropagation();
+                    window.open(event.target.parentNode.getAttribute("href"));
+                } 
+            }
+            
+            // Fix for issue when clicking the symbol of a <details><summary> ...
+            if (event.target.tagName === "SUMMARY") {
+                if(event.target.parentNode.tagName === "DETAILS") {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    // Manually toggle between open or closed <details>
+                    if(event.target.parentNode.open === true) {
+                        event.target.parentNode.open = false;
+                    } else {
+                        event.target.parentNode.open = true;
+                    }
+                }
+            }
+        }
+    }).on('touchmove', function(){
+        touchmoved = true;
+    }).on('touchstart', function(){
+        touchmoved = false;
+    });
+
+    //// Code to chage between slides depending on user screen swipe ////
+    // Such option is supossed to work already in Xaringan, but it was not working for me :(
+    let touchstartX = 0;
+    let touchendX = 0;
+    let swiped = false;
+
+    function conditional_swipe() {
+        // Swiped left
+        if (touchendX < touchstartX) {
+            if ( (touchstartX - touchendX) > (screen.availWidth)*0.25 ) slideshow.gotoNextSlide();
+        } else {
+            // Swiped right, because swiped equals true
+            if ( (touchendX - touchstartX) > (screen.availWidth)*0.25 ) slideshow.gotoPreviousSlide();
+        }
+    }
+        
+    $('div.remark-slide-container').on('touchstart', event => {
+        touchstartX = event.changedTouches[0].screenX;
+        swiped = false;
+    });
+
+    $('div.remark-slide-container').on('touchmove', function() { swiped = true; });
+
+    $('div.remark-slide-container').on('touchend', event => {
+        touchendX = event.changedTouches[0].screenX;
+        if (swiped === true) conditional_swipe();
+    });
+</script>
