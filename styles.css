@@ -15,7 +15,7 @@ html {
   overflow: auto;
   
   min-width: 10vw; 
-  max-height: 50vh;
+  height: 50vh;
   resize: horizontal;
 
   /* height: 100vh; */

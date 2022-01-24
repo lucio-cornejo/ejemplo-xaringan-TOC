@@ -25,6 +25,15 @@ class: center, middle, inverse, title-slide
 
 
 
+# Comandos para la tabla de contenidos (_toc_)
+
+- Presionar **t** para mostrar u ocultar la _toc_ .
+- Presionar **s** para mostrar u ocultar la _toc_, tras 
+  haberla insertado en el espacio vacío izquierdo que dejan
+  estas diapositivas de Xaringan, en caso exista aquel espacio vacío.
+
+---
+
 # Motivación - Rmd
 
 Multiples opciones de publicaciones con RMarkdown:
@@ -907,11 +916,20 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
         toc.children.forEach( (element) => {
           if ( currentSlide > 0 ) {
             if ( parseInt(element.firstChild.dataset.slide) < currentSlide ) {
-              element.firstChild.style.opacity = 0.5;
+              element.firstChild.style.opacity = 0.35;
+              element.firstChild.style.fontWeight = 400;
               element.firstChild.style.textDecoration = "line-through";
             } else {
-              element.firstChild.style.opacity = 1;
-              element.firstChild.style.textDecoration = "";
+              if ( parseInt(element.firstChild.dataset.slide) === currentSlide ) {
+                element.firstChild.style.opacity = 1;
+                element.firstChild.style.fontWeight = 900;
+                element.firstChild.style.textDecoration = "";
+              } else {
+                element.firstChild.style.opacity = 1;
+                element.firstChild.style.fontWeight = 400;
+                element.firstChild.style.textDecoration = "";
+
+              }
             }
           } else {
             // Currrent slide is the first one, so undo cross and opacity changes
@@ -951,6 +969,30 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
         event.preventDefault();
         event.stopPropagation();
       })
+    });
+
+    // Press s in order to stick table of contents to the left empty side
+    // of Xaringan slides, if there is any such empty space
+    document.addEventListener('keydown', function() {
+      if (event.key === "s") {
+        if (event.repeat) {
+          return;
+        }
+        if(tocDiv.style.display === 'block') {
+          tocDiv.style.display = 'none';
+        } else {
+          tocDiv.style.display = 'block';
+        }
+
+        // Check if there is empty space where to insert the toc
+        let someSlide = document.querySelector('div.remark-slide-scaler');
+        if (parseInt(someSlide.style.left.slice(0,-2)) === 0) {
+        } else {
+          tocDiv.style.width = String(Math.round(parseInt(someSlide.style.left.slice(0,-2))*0.977))+'px';
+          tocDiv.style.height = '100vh';
+          tocDiv.style.top = '0';
+        }
+      }
     });
 
   });
