@@ -968,8 +968,17 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
 
         // Close and open table of contents in order to activate
         // line-through and opacity change of previous anchors
-        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
-        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
+        switch (tocDiv.style.height) {
+          case '100vh':
+            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+            break;
+          default:
+            // We assume the height is either 50vh or some custom one aparat from 100vh
+            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
+            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
+            break;
+        }
 
         // Scroll the table of contents to the anchor just clicked
         this.scrollIntoView();
@@ -1000,6 +1009,33 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
           tocDiv.style.height = '100vh';
           tocDiv.style.top = '0';
         }
+
+        // Cross and change opacity of toc anchors from previous slides
+        let currentSlide = slideshow.getCurrentSlideIndex();
+        toc.children.forEach( (element) => {
+          if ( currentSlide > 0 ) {
+            if ( parseInt(element.firstChild.dataset.slide) < currentSlide ) {
+              element.firstChild.style.opacity = 0.35;
+              element.firstChild.style.fontWeight = 400;
+              element.firstChild.style.textDecoration = "line-through";
+            } else {
+              if ( parseInt(element.firstChild.dataset.slide) === currentSlide ) {
+                element.firstChild.style.opacity = 1;
+                element.firstChild.style.fontWeight = 900;
+                element.firstChild.style.textDecoration = "";
+              } else {
+                element.firstChild.style.opacity = 1;
+                element.firstChild.style.fontWeight = 400;
+                element.firstChild.style.textDecoration = "";
+
+              }
+            }
+          } else {
+            // Currrent slide is the first one, so undo cross and opacity changes
+            element.firstChild.style.opacity = 1;
+            element.firstChild.style.textDecoration = "";
+          }
+        });
       }
     });
 
