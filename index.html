@@ -947,6 +947,11 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
         // is required in order to show de TOC, due to it being "hidden"
         // after changing slide from a slide where the TOC was displayed.
         
+        // Default toc stylings
+        tocDiv.style.top = '';
+        tocDiv.style.width = 'auto';
+        tocDiv.style.height = '50vh';
+
         // Insert table of contents on page
         body.append(tocDiv);
 
