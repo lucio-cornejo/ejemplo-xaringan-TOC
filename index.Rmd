@@ -4,10 +4,10 @@ author: "Evelyn Gutierrez"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    css:  ["my-slides-style.css","xaringan-toc-style.css", rladies, rladies-fonts]
+    css: [my-slides-style.css, rladies, rladies-fonts] #,xaringan-toc-style.css"]
     includes:
       in_header: "jQuery.js"
-      after_body: ["my-custom-slides-script.html","xaringan-toc-js.html"]
+      after_body: [my-custom-slides-script.html, xaringan-toc-css-and-js.html]
     nature:
       highlightStyle: haddock
       highlightLines: true
