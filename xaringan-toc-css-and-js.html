@@ -210,6 +210,12 @@
         temporal = 2*temporal;
         slide.style.left = String(temporal)+'px';
       });
+
+      // Close and open table of contents in order to fix width
+      if ( tocDiv.style.height === '100vh') {
+        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+      }
     }
     pushSlidesToRightCounter += 1;
   }

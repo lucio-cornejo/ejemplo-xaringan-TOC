@@ -25,6 +25,11 @@ class: center, middle, inverse, title-slide
 
 
 # Comandos definidos para la _toc_
+tempo = gsub('"','', gsub('\\\\','/',readClipboard()))
+file_name = tail(strsplit(tempo,'/')[[1]],n=1)
+file_path = substr(tempo,1,nchar(tempo)-nchar(file_name))
+setwd(file_path)
+rmarkdown::render(file_name)
 
 - Presionar **t** para mostrar u ocultar la _toc_ .
 
@@ -1047,6 +1052,12 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
         temporal = 2*temporal;
         slide.style.left = String(temporal)+'px';
       });
+
+      // Close and open table of contents in order to fix width
+      if ( tocDiv.style.height === '100vh') {
+        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+      }
     }
     pushSlidesToRightCounter += 1;
   }

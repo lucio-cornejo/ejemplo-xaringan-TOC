@@ -22,6 +22,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Comandos definidos para la _toc_
+tempo = gsub('"','', gsub('\\\\','/',readClipboard()))
+file_name = tail(strsplit(tempo,'/')[[1]],n=1)
+file_path = substr(tempo,1,nchar(tempo)-nchar(file_name))
+setwd(file_path)
+rmarkdown::render(file_name)
 
 - Presionar **t** para mostrar u ocultar la _toc_ .
 
