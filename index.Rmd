@@ -4,14 +4,15 @@ author: "Evelyn Gutierrez"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    css:  ["my-slides-style.css","styles.css", rladies, rladies-fonts]
+    css:  ["my-slides-style.css","xaringan-toc-style.css", rladies, rladies-fonts]
     includes:
       in_header: "jQuery.js"
-      after_body: ["my-custom-slides-script.html","scripts.html"]
+      after_body: ["my-custom-slides-script.html","xaringan-toc-js.html"]
     nature:
       highlightStyle: haddock
       highlightLines: true
       countIncrementalSlides: true
+      ratio: 4:3
       navigation:
         scroll: false
 ---

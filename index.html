@@ -4,13 +4,13 @@
     <title>Taller de RMarkdown</title>
     <meta charset="utf-8" />
     <meta name="author" content="Evelyn Gutierrez" />
-    <meta name="date" content="2022-01-24" />
+    <meta name="date" content="2022-01-25" />
     <script src="index_files/header-attrs-2.11.4/header-attrs.js"></script>
     <link href="index_files/remark-css-0.0.1/rladies.css" rel="stylesheet" />
     <link href="index_files/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="my-slides-style.css" type="text/css" />
-    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <link rel="stylesheet" href="xaringan-toc-style.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 
 # Taller de RMarkdown
 ### Evelyn Gutierrez
-### 2022-01-24
+### 2022-01-25
 
 ---
 
@@ -136,8 +136,7 @@ find.package(c("rmarkdown","knitr"))
 ```
 
 ```
-## [1] "C:/Users/HP/Documents/R/win-library/4.0/rmarkdown"
-## [2] "C:/Users/HP/Documents/R/win-library/4.0/knitr"
+## [1] "C:/Users/HP/Documents/R/win-library/4.0/rmarkdown" "C:/Users/HP/Documents/R/win-library/4.0/knitr"
 ```
 ]
 
@@ -657,6 +656,7 @@ Texto en un bloque
 "highlightStyle": "haddock",
 "highlightLines": true,
 "countIncrementalSlides": true,
+"ratio": "4:3",
 "navigation": {
 "scroll": false
 }
@@ -909,33 +909,9 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
           return;
         }
 
-        // Cross and change opacity of toc anchors from previous slides
-        let currentSlide = slideshow.getCurrentSlideIndex();
-        toc.children.forEach( (element) => {
-          if ( currentSlide > 0 ) {
-            if ( parseInt(element.firstChild.dataset.slide) < currentSlide ) {
-              element.firstChild.style.opacity = 0.35;
-              element.firstChild.style.fontWeight = 400;
-              element.firstChild.style.textDecoration = "line-through";
-            } else {
-              if ( parseInt(element.firstChild.dataset.slide) === currentSlide ) {
-                element.firstChild.style.opacity = 1;
-                element.firstChild.style.fontWeight = 900;
-                element.firstChild.style.textDecoration = "";
-              } else {
-                element.firstChild.style.opacity = 1;
-                element.firstChild.style.fontWeight = 400;
-                element.firstChild.style.textDecoration = "";
+        // Update opacity, line-through and font-weight of toc's anchors
+        updateTocAnchorsStyle();
 
-              }
-            }
-          } else {
-            // Currrent slide is the first one, so undo cross and opacity changes
-            element.firstChild.style.opacity = 1;
-            element.firstChild.style.textDecoration = "";
-          }
-          });
-        
         //// Best alternative I've found so far to insert table of contents ////
         // slides[slideshow.getCurrentSlideIndex()].children[0].append(tocDiv);
         // Such alternative has the issue that sometimes double the key press
@@ -996,41 +972,17 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
           return;
         }
 
+        // Update opacity, line-through and font-weight of toc's anchors
+        updateTocAnchorsStyle();
+
         // Check if there is empty space where to insert the toc
         let someSlide = document.querySelector('div.remark-slide-scaler');
         if (parseInt(someSlide.style.left.slice(0,-2)) === 0) {
         } else {
-          tocDiv.style.width = String(Math.round(parseInt(someSlide.style.left.slice(0,-2))*0.977))+'px';
+          tocDiv.style.width = String(Math.round(parseInt(someSlide.style.left.slice(0,-2))*1))+'px';
           tocDiv.style.height = '100vh';
           tocDiv.style.top = '0';
         }
-
-        // Cross and change opacity of toc anchors from previous slides
-        let currentSlide = slideshow.getCurrentSlideIndex();
-        toc.children.forEach( (element) => {
-          if ( currentSlide > 0 ) {
-            if ( parseInt(element.firstChild.dataset.slide) < currentSlide ) {
-              element.firstChild.style.opacity = 0.35;
-              element.firstChild.style.fontWeight = 400;
-              element.firstChild.style.textDecoration = "line-through";
-            } else {
-              if ( parseInt(element.firstChild.dataset.slide) === currentSlide ) {
-                element.firstChild.style.opacity = 1;
-                element.firstChild.style.fontWeight = 900;
-                element.firstChild.style.textDecoration = "";
-              } else {
-                element.firstChild.style.opacity = 1;
-                element.firstChild.style.fontWeight = 400;
-                element.firstChild.style.textDecoration = "";
-
-              }
-            }
-          } else {
-            // Currrent slide is the first one, so undo cross and opacity changes
-            element.firstChild.style.opacity = 1;
-            element.firstChild.style.textDecoration = "";
-          }
-        });
 
         if(tocDiv.style.display === 'block') {
           tocDiv.style.display = 'none';
@@ -1050,6 +1002,82 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       temporal = temporal.parentNode;
     }
     return temporal.parentNode;
+  }
+
+  let pushSlidesToRightCounter = 0;
+  function pushSlidesToRight() {
+    if (pushSlidesToRightCounter === 0) {
+      let slideScalers = document.querySelectorAll('div.remark-slide-scaler');
+      slideScalers = Array.prototype.slice.call(slideScalers);
+      
+      // Duplicate empty space to the left of slide
+      slideScalers.forEach(slide => {
+        let temporal = parseInt(slide.style.left.slice(0,-2));
+        temporal = 2*temporal;
+        slide.style.left = String(temporal)+'px';
+      });
+    }
+    pushSlidesToRightCounter += 1;
+  }
+
+  $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', async function() {
+    // Whenever a change from or to fullscreen window occurs,
+    // wait a while (because slides take a little time to get resized)
+    // and do the following:
+
+    await sleep(200);
+
+    // Reset counter for pushing slides to the right
+    pushSlidesToRightCounter = 0;
+
+    // Resize the toc even if it was not open during this event
+    if (tocDiv.style.height === '100vh') {
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+    } else {
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
+    }
+  });
+
+  function updateTocAnchorsStyle() {
+    // Update opacity, line-through and font-weight of toc's anchors
+    let currentSlide = slideshow.getCurrentSlideIndex();
+    toc.children.forEach( (element) => {
+      if ( currentSlide > 0 ) {
+        if ( parseInt(element.firstChild.dataset.slide) < currentSlide ) {
+          element.firstChild.style.opacity = 0.5;
+          element.firstChild.style.fontWeight = 400;
+          element.firstChild.style.textDecoration = "line-through";
+        } else {
+          if ( parseInt(element.firstChild.dataset.slide) === currentSlide ) {
+            element.firstChild.style.opacity = 1;
+            element.firstChild.style.fontWeight = 900;
+            element.firstChild.style.textDecoration = "";
+          } else {
+            element.firstChild.style.opacity = 1;
+            element.firstChild.style.fontWeight = 400;
+            element.firstChild.style.textDecoration = "";
+
+          }
+        }
+      } else {
+        // Currrent slide is the first one, so undo anchor style changes
+        element.firstChild.style.opacity = 1;
+        element.firstChild.style.fontWeight = 400;
+        element.firstChild.style.textDecoration = "";
+        
+        // Bold anchors from first slide
+        if (element.firstChild.dataset.slide === '0') {
+          element.firstChild.style.fontWeight = 900;
+        }
+      }
+    });
+  }
+
+  // Define the standard sleep() function
+  function sleep(miliseconds) {
+    return new Promise(resolve => setTimeout(resolve, miliseconds));
   }
 </script>
 
