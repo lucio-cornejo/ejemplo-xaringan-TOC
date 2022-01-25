@@ -4,6 +4,8 @@
   let slidesParent, slides, headers;
   let slidesHeaders = [];
   let toc, tocDiv, tocTitle;
+  
+  let resizeSlides; // variable for manual slide resize (different than slides variable)
 
   document.addEventListener('DOMContentLoaded', function() {
     // Set variables
@@ -124,9 +126,6 @@
           // Insert table of contents on page
           body.append(tocDiv);
         }
-
-        event.preventDefault();
-        event.stopPropagation();
       }
     });
 
@@ -152,9 +151,6 @@
 
         // Scroll the table of contents to the anchor just clicked
         this.scrollIntoView();
-
-        event.preventDefault();
-        event.stopPropagation();
       })
     });
 
@@ -188,6 +184,10 @@
       }
     });
 
+    // Select the slide divs which set the slide dimensions
+    resizeSlides = slides.map(slide => slide.firstChild);
+    resizeSlides.forEach(slide => slide.style.resize = "horizontal");
+
   });
 
   function getDivSlideContainer(header) {
@@ -198,26 +198,16 @@
     return temporal.parentNode;
   }
 
-  let pushSlidesToRightCounter = 0;
   function pushSlidesToRight() {
-    if (pushSlidesToRightCounter === 0) {
-      let slideScalers = document.querySelectorAll('div.remark-slide-scaler');
-      slideScalers = Array.prototype.slice.call(slideScalers);
-      
-      // Duplicate empty space to the left of slide
-      slideScalers.forEach(slide => {
-        let temporal = parseInt(slide.style.left.slice(0,-2));
-        temporal = 2*temporal;
-        slide.style.left = String(temporal)+'px';
-      });
+    // Get real width of current slide and push slide to the right of screen
+    let temporal = screen.availWidth - resizeSlides[slideshow.getCurrentSlideIndex()].getBoundingClientRect().width ;
+    resizeSlides.forEach(slide => { slide.style.left = String(Math.round(temporal))+'px'; });
 
-      // Close and open table of contents in order to fix width
-      if ( tocDiv.style.height === '100vh') {
-        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
-        document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
-      }
+    // Close and open table of contents in order to fix width
+    if ( tocDiv.style.height === '100vh') {
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
     }
-    pushSlidesToRightCounter += 1;
   }
 
   document.addEventListener('keydown', function(event) {
@@ -229,15 +219,26 @@
     }
   });
 
+  document.addEventListener('keydown', function(event) {
+    if (event.key === "w") {
+        if (event.repeat) {
+          return;
+        }
+
+        let currentSlide = resizeSlides[slideshow.getCurrentSlideIndex()];
+        resizeSlides.forEach(slide => { 
+          // slide.style.width = String(Math.round(currentSlide.getBoundingClientRect().width))+'px';
+          slide.style.width = String(currentSlide.offsetWidth)+'px';
+        });
+    }
+  });
+
   $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', async function() {
     // Whenever a change from or to fullscreen window occurs,
     // wait a while (because slides take a little time to get resized)
     // and do the following:
 
     await sleep(200);
-
-    // Reset counter for pushing slides to the right
-    pushSlidesToRightCounter = 0;
 
     // Resize the toc even if it was not open during this event
     if (tocDiv.style.height === '100vh') {
@@ -285,14 +286,13 @@
   }
 
   // Refresh toc after a slide change
-  slideshow.on('afterShowSlide',async function() {
+  slideshow.on('afterShowSlide', async function() {
     // Wait some time so that the new slide index gets recognized
     await sleep(100);
 
     // Update the style of the table of contents' anchors
     updateTocAnchorsStyle();
   });
-
 
   // Define the standard sleep() function
   function sleep(miliseconds) {
