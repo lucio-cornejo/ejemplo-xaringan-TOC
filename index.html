@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 
 
 
-# Comandos para la tabla de contenidos (_toc_)
+# Comandos definidos para la _toc_
 
 - Presionar **t** para mostrar u ocultar la _toc_ .
 
@@ -34,6 +34,10 @@ class: center, middle, inverse, title-slide
   haberla insertado en el espacio vacío izquierdo que dejan
   estas diapositivas de Xaringan, en caso exista aquel espacio vacío.
 
+&lt;br&gt;
+
+- Presionar **r** para que las diapositivas se ubiquen lo más pegado
+  hacia el lado derecho de la pantalla.
 ---
 
 # Motivación - Rmd
@@ -1046,6 +1050,15 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     pushSlidesToRightCounter += 1;
   }
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === "r") {
+        if (event.repeat) {
+          return;
+        }
+        pushSlidesToRight();
+    }
+  });
 
   $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', async function() {
     // Whenever a change from or to fullscreen window occurs,

@@ -214,6 +214,15 @@
     pushSlidesToRightCounter += 1;
   }
 
+  document.addEventListener('keydown', function(event) {
+    if (event.key === "r") {
+        if (event.repeat) {
+          return;
+        }
+        pushSlidesToRight();
+    }
+  });
+
   $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', async function() {
     // Whenever a change from or to fullscreen window occurs,
     // wait a while (because slides take a little time to get resized)

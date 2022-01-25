@@ -21,7 +21,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Comandos para la tabla de contenidos (_toc_)
+# Comandos definidos para la _toc_
 
 - Presionar **t** para mostrar u ocultar la _toc_ .
 
@@ -31,6 +31,10 @@ knitr::opts_chunk$set(echo = TRUE)
   haberla insertado en el espacio vacío izquierdo que dejan
   estas diapositivas de Xaringan, en caso exista aquel espacio vacío.
 
+<br>
+
+- Presionar **r** para que las diapositivas se ubiquen lo más pegado
+  hacia el lado derecho de la pantalla.
 ---
 
 # Motivación - Rmd
