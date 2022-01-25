@@ -284,6 +284,16 @@
     });
   }
 
+  // Refresh toc after a slide change
+  slideshow.on('afterShowSlide',async function() {
+    // Wait some time so that the new slide index gets recognized
+    await sleep(100);
+
+    // Update the style of the table of contents' anchors
+    updateTocAnchorsStyle();
+  });
+
+
   // Define the standard sleep() function
   function sleep(miliseconds) {
     return new Promise(resolve => setTimeout(resolve, miliseconds));
