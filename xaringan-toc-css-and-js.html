@@ -15,17 +15,16 @@
     helpMenu.setAttribute('style','overflow: auto;'); // Show all keyboard commands for Xaringan
     slidesParent = document.querySelector('div.remark-slides-area');
 
-    // Important to search for headers only in the 
-    // div.remark-slides-area, because, if not, there are 
-    // headers that get added more than once to the variable "headers"
+    ////////////////////////////////////////////////////////////////////
+    //// Remove the headers which have been set not be added to TOC ////
+
+    // Important to search for headers only in div.remark-slides-area, 
+    // because, if not, there are  headers that get added more than once to the variable "headers"
     headers = document.querySelectorAll('div.remark-slides-area h1, div.remark-slides-area h2, div.remark-slides-area h3, div.remark-slides-area h4, div.remark-slides-area h5, div.remark-slides-area h6');
 
     // Convert some variables to arrays
     headers = Array.prototype.slice.call(headers);
     slides = Array.prototype.slice.call(slidesParent.children);
-
-    // Remove headers with class "no-toc"
-    headers = headers.filter(element => !( element.classList.contains('no-toc') ));
 
     // Remove the header h1 "Help" from the Xaringan menu
     for (let i =0; i< headers.length; i++){
@@ -33,6 +32,29 @@
         headers.splice(i,1);
       }
     }
+
+    // Remove headers with class "no-toc"
+    headers = headers.filter(header => !( header.classList.contains('no-toc') ));
+    
+    // Remove headers which were applied ".no-toc[ some_header ]" in the R Markdown code
+    headers = headers.filter(header => !( header.parentNode.classList.contains('no-toc') && header.parentNode.tagName==='DIV'));
+
+    // Remove headers contained in a slide to which "class: no-toc" was applied
+    headers = headers.filter( (header) => {
+      let temporal = getDivSlideContainer(header).firstChild.firstChild.firstChild;
+      // Check that the child chosen is the div with class "remark-slide-content",
+      // the one to which the class "no-toc" would be added if "class: no-toc" was used
+      if ( temporal.classList.contains('remark-slide-content') && temporal.tagName === 'DIV' ) {
+        if( temporal.classList.contains('no-toc') ){
+          // Remove this header
+          return false;
+        } else {
+          // Do not remove this header
+          return true;
+        }
+      }
+    });
+    ////////////////////////////////////////////////////////////////////
 
     // Group headers via the slide they belong to
     for(let i=0; i < slides.length; i++){
@@ -90,7 +112,7 @@
     document.querySelector('#xaringan-toc').setAttribute('style',"margin: 0; padding: 5px 30px 10px 40px;");
     
     // Style properties for anchors of table of contents
-    let css = "#xaringan-toc li a { cursor: pointer; color: blue; }"+"\n"+"#xaringan-toc li a:hover { color: red; text-decoration: underline; }";
+    let css = "#xaringan-toc li a { cursor: pointer; color: blue; transition: all 260ms linear; }"+"\n"+"#xaringan-toc li a:hover { color: red; text-decoration: underline; }";
     let style = document.createElement('style');
     if (style.styleSheet) {
         style.styleSheet.cssText = css;
