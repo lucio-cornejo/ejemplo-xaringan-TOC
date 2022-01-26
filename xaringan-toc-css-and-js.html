@@ -3,6 +3,7 @@
   let body;
   let slidesParent, slides, headers;
   let slidesHeaders = [];
+  let helpMenu;
   let toc, tocDiv, tocTitle;
   
   let resizeSlides; // variable for manual slide resize (different than slides variable)
@@ -10,6 +11,8 @@
   document.addEventListener('DOMContentLoaded', function() {
     // Set variables
     body = document.querySelector('body');
+    helpMenu = document.querySelector('div.remark-help');
+    helpMenu.setAttribute('style','overflow: auto;'); // Show all keyboard commands for Xaringan
     slidesParent = document.querySelector('div.remark-slides-area');
 
     // Important to search for headers only in the 
@@ -100,7 +103,7 @@
 
     // Pres key t to display Table of Contents
     document.addEventListener('keydown', function(event) {
-      if (event.key === "t") {
+      if (event.key === 'd') {
         if (event.repeat) {
           return;
         }
@@ -139,13 +142,13 @@
         // line-through and opacity change of previous anchors
         switch (tocDiv.style.height) {
           case '100vh':
-            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
-            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'e'}));
+            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'e'}));
             break;
           default:
             // We assume the height is either 50vh or some custom one aparat from 100vh
-            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
-            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
+            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'d'}));
+            document.dispatchEvent(new KeyboardEvent('keydown',{'key':'d'}));
             break;
         }
 
@@ -157,7 +160,7 @@
     // Press s in order to stick table of contents to the left empty side
     // of Xaringan slides, if there is any such empty space
     document.addEventListener('keydown', function() {
-      if (event.key === "s") {
+      if (event.key === 'e') {
         if (event.repeat) {
           return;
         }
@@ -188,6 +191,31 @@
     resizeSlides = slides.map(slide => slide.firstChild);
     resizeSlides.forEach(slide => slide.style.resize = "horizontal");
 
+    resizeSlides.forEach( (slide) => {
+      new ResizeObserver(resizeAllSlides).observe(slide);
+    });
+
+    // In the Help menu, show descriptions of the commands added
+    let newCommandsKeys = [["e","Show TOC with height equal to the page's"],
+                           ["d","Show TOC with half the page's height"],
+                           ["r","Move all the slides to the right side of the page"]
+                          ];
+    newCommandsKeys.forEach( (commandInfo) => {
+      let tableRow =  document.createElement('tr');
+      let tableData = document.createElement('td');
+      let newCommandKey = document.createElement('span');
+      newCommandKey.className = "key";
+      newCommandKey.textContent = commandInfo[0];
+      let commandAction = document.createElement('td');
+      commandAction.textContent = commandInfo[1];
+      // Append (as in the Help menu structure) the elements created
+      tableData.appendChild(newCommandKey);
+      tableRow.appendChild(tableData);
+      tableRow.appendChild(commandAction);
+      // Append new command info to Help menu
+      document.querySelector('div.remark-help table tbody').appendChild(tableRow);
+    });
+
   });
 
   function getDivSlideContainer(header) {
@@ -205,13 +233,13 @@
 
     // Close and open table of contents in order to fix width
     if ( tocDiv.style.height === '100vh') {
-      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
-      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'e'}));
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'e'}));
     }
   }
 
   document.addEventListener('keydown', function(event) {
-    if (event.key === "r") {
+    if (event.key === 'r') {
         if (event.repeat) {
           return;
         }
@@ -219,19 +247,13 @@
     }
   });
 
-  document.addEventListener('keydown', function(event) {
-    if (event.key === "w") {
-        if (event.repeat) {
-          return;
-        }
-
-        let currentSlide = resizeSlides[slideshow.getCurrentSlideIndex()];
-        resizeSlides.forEach(slide => { 
-          // slide.style.width = String(Math.round(currentSlide.getBoundingClientRect().width))+'px';
-          slide.style.width = String(currentSlide.offsetWidth)+'px';
-        });
-    }
-  });
+  function resizeAllSlides() {
+    let currentSlide = resizeSlides[slideshow.getCurrentSlideIndex()];
+    resizeSlides.forEach(slide => { 
+      // slide.style.width = String(Math.round(currentSlide.getBoundingClientRect().width))+'px';
+      slide.style.width = String(currentSlide.offsetWidth) + 'px';
+    });
+  }
 
   $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', async function() {
     // Whenever a change from or to fullscreen window occurs,
@@ -242,11 +264,11 @@
 
     // Resize the toc even if it was not open during this event
     if (tocDiv.style.height === '100vh') {
-      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
-      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'s'}));
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'e'}));
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'e'}));
     } else {
-      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
-      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'t'}));
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'d'}));
+      document.dispatchEvent(new KeyboardEvent('keydown',{'key':'d'}));
     }
   });
 
