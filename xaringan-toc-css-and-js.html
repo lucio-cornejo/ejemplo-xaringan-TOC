@@ -123,7 +123,7 @@
     ////////////////////////////////////////////////////////////
 
 
-    // Pres key t to display Table of Contents
+    // Pres key d to display Table of Contents
     document.addEventListener('keydown', function(event) {
       if (event.key === 'd') {
         if (event.repeat) {
@@ -179,7 +179,7 @@
       })
     });
 
-    // Press s in order to stick table of contents to the left empty side
+    // Press e in order to stick table of contents to the left empty side
     // of Xaringan slides, if there is any such empty space
     document.addEventListener('keydown', function() {
       if (event.key === 'e') {
@@ -260,6 +260,7 @@
     }
   }
 
+  // Press key r in order to push slides to the right
   document.addEventListener('keydown', function(event) {
     if (event.key === 'r') {
         if (event.repeat) {

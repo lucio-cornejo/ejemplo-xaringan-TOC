@@ -4,7 +4,7 @@
     <title>Taller de RMarkdown</title>
     <meta charset="utf-8" />
     <meta name="author" content="Evelyn Gutierrez" />
-    <meta name="date" content="2022-01-25" />
+    <meta name="date" content="2022-01-29" />
     <script src="index_files/header-attrs-2.11.4/header-attrs.js"></script>
     <link href="index_files/remark-css-0.0.1/rladies.css" rel="stylesheet" />
     <link href="index_files/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 
 # Taller de RMarkdown
 ### Evelyn Gutierrez
-### 2022-01-25
+### 2022-01-29
 
 ---
 
@@ -145,7 +145,8 @@ find.package(c("rmarkdown","knitr"))
 ```
 
 ```
-## [1] "C:/Users/HP/Documents/R/win-library/4.0/rmarkdown" "C:/Users/HP/Documents/R/win-library/4.0/knitr"
+## [1] "C:/Users/HP/Documents/R/win-library/4.0/rmarkdown"
+## [2] "C:/Users/HP/Documents/R/win-library/4.0/knitr"
 ```
 ]
 
@@ -966,7 +967,7 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     ////////////////////////////////////////////////////////////
 
 
-    // Pres key t to display Table of Contents
+    // Pres key d to display Table of Contents
     document.addEventListener('keydown', function(event) {
       if (event.key === 'd') {
         if (event.repeat) {
@@ -1022,7 +1023,7 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       })
     });
 
-    // Press s in order to stick table of contents to the left empty side
+    // Press e in order to stick table of contents to the left empty side
     // of Xaringan slides, if there is any such empty space
     document.addEventListener('keydown', function() {
       if (event.key === 'e') {
@@ -1103,6 +1104,7 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 
+  // Press key r in order to push slides to the right
   document.addEventListener('keydown', function(event) {
     if (event.key === 'r') {
         if (event.repeat) {
