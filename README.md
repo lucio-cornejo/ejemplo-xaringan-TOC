@@ -14,5 +14,5 @@ just that, respecting the properties explained by Yihui in this
 ## Demo
 
 Please visit this 
-[link](https://toc-for-xaringan-see-slide-2-for-commands.netlify.app/#1) .
+[link](https://toc-for-xaringan-see-slide-2-for-commands.netlify.app/#1)
 in order to see a demo of this feature.
