@@ -71,13 +71,32 @@ output:
 
 # Random text (simply for toc's demo)
 
+.scrollable[
+
 ## Text 1
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in magna arcu. In ultrices, tellus eget faucibus accumsan, enim metus ornare lorem, et ultricies leo enim sit amet dolor. Ut turpis metus, viverra in vehicula sit amet, feugiat a justo. Quisque in tincidunt arcu, non luctus ligula. 
 
-## Text 1.1
+## Text 2
 
 Donec ullamcorper est in magna congue volutpat. Suspendisse volutpat, erat in tempus lobortis, lacus lectus vulputate diam, non dictum augue ligula quis urna. Morbi eu viverra erat, a sagittis velit. Proin diam sapien, auctor in sem nec, mattis varius elit. Proin cursus tincidunt dignissim. Praesent sollicitudin aliquet maximus. Sed maximus viverra ante eu luctus.
+
+## Text 3
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in magna arcu. In ultrices, tellus eget faucibus accumsan, enim metus ornare lorem, et ultricies leo enim sit amet dolor. Ut turpis metus, viverra in vehicula sit amet, feugiat a justo. Quisque in tincidunt arcu, non luctus ligula. 
+
+### Text 3.1
+
+Donec ullamcorper est in magna congue volutpat. Suspendisse volutpat, erat in tempus lobortis, lacus lectus vulputate diam, non dictum augue ligula quis urna. Morbi eu viverra erat, a sagittis velit. Proin diam sapien, auctor in sem nec, mattis varius elit. Proin cursus tincidunt dignissim. Praesent sollicitudin aliquet maximus. Sed maximus viverra ante eu luctus.
+
+### Text 3.2
+
+Donec ullamcorper est in magna congue volutpat. Suspendisse volutpat, erat in tempus lobortis, lacus lectus vulputate diam, non dictum augue ligula quis urna. Morbi eu viverra erat, a sagittis velit. Proin diam sapien, auctor in sem nec, mattis varius elit. Proin cursus tincidunt dignissim. Praesent sollicitudin aliquet maximus. Sed maximus viverra ante eu luctus.
+
+### Text 3.3
+
+Donec ullamcorper est in magna congue volutpat. Suspendisse volutpat, erat in tempus lobortis, lacus lectus vulputate diam, non dictum augue ligula quis urna. Morbi eu viverra erat, a sagittis velit. Proin diam sapien, auctor in sem nec, mattis varius elit. Proin cursus tincidunt dignissim. Praesent sollicitudin aliquet maximus. Sed maximus viverra ante eu luctus.
+]
 
 ---
 

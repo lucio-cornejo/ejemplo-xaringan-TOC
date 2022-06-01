@@ -339,6 +339,29 @@
     updateTocAnchorsStyle();
   });
 
+  ////////////// SCROLL TOC TO CURRENT HEADER'S ANCHOR WHEN NOT VISIBLE IN TOC //////////////
+  slideshow.on('afterShowSlide', async function () {
+    await sleep(100);
+    let currentSlide = slideshow.getCurrentSlideIndex();
+    let headersInCurrentSlide = toc.children.filter( li => parseInt(li.firstChild.dataset.slide) === currentSlide);
+    if (headersInCurrentSlide.length > 0) {
+      if ( ! isScrolledIntoView(headersInCurrentSlide[0].firstChild) ){
+        headersInCurrentSlide[0].scrollIntoView();
+      }
+    }
+  })
+
+  function isScrolledIntoView(el) {
+    let rect = el.getBoundingClientRect();
+
+    // Only completely visible elements return true
+    let isVisible = (rect.top >= 0) && (rect.bottom <= tocDiv.getBoundingClientRect().bottom);
+    // pending to fix such isVisible criterion for when toc's height is 50vh
+    // and the slide change to one wherte its header's anchor is not visible in the toc
+    return isVisible;
+  }
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
   // Define the standard sleep() function
   function sleep(miliseconds) {
     return new Promise(resolve => setTimeout(resolve, miliseconds));
